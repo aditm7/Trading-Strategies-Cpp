@@ -107,13 +107,15 @@ void LinearRegression::run(){ // actual strategy code
   Eigen::MatrixXd theta = linear_regression(X, Y);
 
   // first day from which trading should begin
-  int idx = 0;
+  int idx = -1;
   for(int i=0;i<this->train_data.size();i++){
     if(compare_dates(this->trade_data[i]->date,this->start_date)){
       idx = i;
       break;
     }
   }
+  if(idx==-1) return; // returning if no trading day found
+  
   // Predict price for each day
   assert(idx-1>=0);
   vector<double>predicted_prices = predict_prices(this->trade_data, theta, idx);
