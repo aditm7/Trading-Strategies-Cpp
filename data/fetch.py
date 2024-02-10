@@ -9,12 +9,12 @@ import sys
 
 # Required headers are: Date, Open Price, Close Price, High, Low, Last Trade Price (LTP), Volume, Value and Number of Trades
 stock_select_headers = [ "CH_TIMESTAMP", 
-                    "CH_OPENING_PRICE", "CH_TRADE_HIGH_PRICE",
-                    "CH_TRADE_LOW_PRICE","CH_CLOSING_PRICE",
+                    "CH_TRADE_HIGH_PRICE", "CH_TRADE_LOW_PRICE",
+                    "CH_CLOSING_PRICE", "CH_OPENING_PRICE",
                     "VWAP","CH_TOTAL_TRADES"]
 stock_final_headers = [ "date",
-                    "open", "high",
-                    "low","close",
+                    "high", "low",
+                    "close", "open", 
                     "vwap","no_of_trades"]
 stock_dtypes = [ ut.np_date,
             ut.np_float, ut.np_float,
@@ -56,6 +56,17 @@ try:
     to_date = datetime.strptime(str(sys.argv[4]), '%d/%m/%Y').date()
     raw = fetch_raw_data(stock_code,from_date,to_date)
     save_csv(raw,stock_code)
+
+  elif strategy=="LINEAR_REGRESSION":
+    from_date = datetime.strptime(str(sys.argv[3]), '%d/%m/%Y').date()
+    to_date = datetime.strptime(str(sys.argv[4]), '%d/%m/%Y').date()
+    raw = fetch_raw_data(stock_code,from_date,to_date)
+    save_csv(raw,stock_code)
+
+    train_from_date = datetime.strptime(str(sys.argv[5]), '%d/%m/%Y').date()
+    train_to_date = datetime.strptime(str(sys.argv[6]), '%d/%m/%Y').date()
+    raw = fetch_raw_data(stock_code,train_from_date,train_to_date)
+    save_csv(raw,'train')
   
   print(f"Success for {stock_code}")
 
