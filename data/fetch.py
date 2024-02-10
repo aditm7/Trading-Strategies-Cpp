@@ -59,6 +59,7 @@ try:
 
   elif strategy=="LINEAR_REGRESSION":
     from_date = datetime.strptime(str(sys.argv[3]), '%d/%m/%Y').date()
+    from_date = from_date - timedelta(days=10)
     to_date = datetime.strptime(str(sys.argv[4]), '%d/%m/%Y').date()
     raw = fetch_raw_data(stock_code,from_date,to_date)
     save_csv(raw,stock_code)
