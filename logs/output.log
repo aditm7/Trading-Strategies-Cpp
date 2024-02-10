@@ -1,0 +1,2 @@
+./bin/main       
+make: *** [all] Segmentation fault: 11

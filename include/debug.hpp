@@ -1,5 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
+template<class L,class R> ostream& operator << (ostream& out, pair<L, R> const &val){ if(out.rdbuf()==cout.rdbuf()) return (out<<val.first<<" "<<val.second); else return (out << "{" << val.first << "," << val.second << "}"); }
+template<class Ch, class Tr, class Container> basic_ostream <Ch, Tr> & operator << (basic_ostream <Ch, Tr> & os, Container const&X) { if (os.rdbuf() != cout.rdbuf()) os << "[ "; if constexpr(is_same_v<Container, vector<bool>>) for (int i = 0; i < X.size(); i++) os << (X[i] ? "true" : "false") << ' '; else for (auto& elem : X) os << elem << ' '; if (os.rdbuf() != cout.rdbuf()) os << "]"; return os; }
 template <class P, class Q = vector<P>, class R = less<P>>
 ostream &operator<<(ostream &out, priority_queue<P, Q, R> const &M)
 {
@@ -70,5 +72,3 @@ void console(T t, Args... args)
     cerr << t << " ";
     error(args...);
 }
-template<class L,class R> ostream& operator << (ostream& out, pair<L, R> const &val){ if(out.rdbuf()==cout.rdbuf()) return (out<<val.first<<" "<<val.second); else return (out << "{" << val.first << "," << val.second << "}"); }
-template<class Ch, class Tr, class Container> basic_ostream <Ch, Tr> & operator << (basic_ostream <Ch, Tr> & os, Container const&X) { if (os.rdbuf() != cout.rdbuf()) os << "[ "; if constexpr(is_same_v<Container, vector<bool>>) for (int i = 0; i < X.size(); i++) os << (X[i] ? "true" : "false") << ' '; else for (auto& elem : X) os << elem << ' '; if (os.rdbuf() != cout.rdbuf()) os << "]"; return os; }

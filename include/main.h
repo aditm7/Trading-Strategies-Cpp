@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<string>
+
 using namespace std;
 #define endl "\n"
 
@@ -11,8 +12,3 @@ using namespace std;
 #define error(...) 42
 #define console(...) 42
 #endif
-
-enum Strategy{
-  BASIC,
-  DMA
-};
