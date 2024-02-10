@@ -20,6 +20,17 @@ Stock::~Stock(){ // Default destructor
 
 }
 
+ostream& operator<<(std::ostream& os,Stock*& stock) {
+  os << "{ Date: " << stock->date << ", ";
+  os << "High: " << stock->high << ", ";
+  os << "Low: " << stock->low << ", ";
+  os << "Close: " << stock->close << ", ";
+  os << "Open: " << stock->open << ", ";
+  os << "VWAP: " << stock->vwap << ", ";
+  os << "Num_Trades: " << stock->num_trades << " }";
+  return os;
+}
+
 //------ Order Class functions -----
 
 Order::Order(){ // Defualt constructor
@@ -35,4 +46,12 @@ Order::Order(string _date,int _order_type,int _num,double _price){
 
 Order::~Order(){ // Default destructor
 
+}
+
+ostream& operator<<(ostream& os,Order*& order){
+  os << "{ Date: " << order->date << ", ";
+  os << "Type: " << order->order_type << ", ";
+  os << "Qty: " << order->num << ", ";
+  os << "Price: " << order->price << " }";
+  return os;
 }

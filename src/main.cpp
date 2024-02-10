@@ -11,7 +11,8 @@ int main(int argc,char* argv[]){
 
   string strategy = argv[1];
   if(strategy=="BASIC"){
-    // code for BASIC
+    Basic* basic_strategy = new Basic(argv[2],stoi(argv[3]),stoi(argv[4]),argv[5],argv[6]);
+    basic_strategy->run_strategy();
   }
   else if(strategy=="DMA"){
 

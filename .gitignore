@@ -34,5 +34,6 @@ bin/*.o
 
 #Data files
 data/*.csv
-
+*.csv
+*.txt
 .vscode/
