@@ -4,6 +4,8 @@
 #include "basic.h"
 #include "dma.h"
 #include "dmapp.h"
+#include "macd.h"
 #include "linear_regression.h"
 #include "debug.h"
+
 using namespace std;
