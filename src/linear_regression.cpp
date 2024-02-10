@@ -139,6 +139,9 @@ void LinearRegression::run(){ // actual strategy code
     }
     this->cashflow.push_back({this->trade_data[i]->date,this->bal});
   }
+
+  // squaring off the positions
+  this->bal += this->curr_x * this->trade_data.back()->close;
 }
 
 void LinearRegression::run_strategy(){ // calls run and just save the data
