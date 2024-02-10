@@ -32,17 +32,27 @@ vector<Stock*> read_csv(string filename){
 
 void write_order_statistics(const vector<Order*> &data){
   ofstream file("order_statisitcs.csv",ios::out);
+  file<<"Date"<<','<<"Order_dir"<<','<<"Quantity"<<','<<"Price"<<"\n";
   for(auto &order:data){
     file<<order->date<<','
         <<(order->order_type?"SELL":"BUY")<<','
         <<order->num<<','
         <<order->price<<"\n";
   }
+  file.close();
 }
 
 void write_daily_cashflow(const vector<pair<string,double>> &data){
   ofstream file("daily_cashflow.csv",ios::out);
+  file<<"Date"<<','<<"Cashflow"<<"\n";
   for(auto &flow:data){
     file<<flow.first<<','<<flow.second<<"\n";
   }
+  file.close();
+}
+
+void write_to_txt(double num){
+  ofstream file("final_pnl.txt",ios::out);
+  file<<num<<"\n";
+  file.close();
 }
