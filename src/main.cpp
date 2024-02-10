@@ -15,7 +15,8 @@ int main(int argc,char* argv[]){
     basic_strategy->run_strategy();
   }
   else if(strategy=="DMA"){
-
+    DMA* dma_strategy = new DMA(argv[2],stoi(argv[3]),stoi(argv[4]),stoi(argv[5]),argv[6],argv[7]);
+    dma_strategy->run_strategy();
   }
   else if(strategy=="LINEAR_REGRESSION"){
     LinearRegression* linreg_strategy = new LinearRegression(argv[2],stoi(argv[3]),stoi(argv[4]),argv[5],argv[6]);

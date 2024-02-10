@@ -1,24 +1,25 @@
-#include "basic.h"
+#include "dma.h"
 
-Basic::Basic(){ // default constructor
-
-}
-
-Basic::~Basic(){ // default destructor
+DMA::DMA(){
 
 }
 
-Basic::Basic(string _code,int _n,int _x,string _start_date,string _end_date){
+DMA::~DMA(){
+
+}
+
+DMA::DMA(string _code,int _n,int _x,int _p,string _start_date,string _end_date){
   this->stock_code = _code;
   this->n = _n;
   this->x = _x;
+  this->p = _p;
   this->start_date = _start_date; 
   this->end_date = _end_date;
 
   this->data = read_csv("data/"+this->stock_code+".csv");
 }
 
-void Basic::run(){ // actual strategy code
+void DMA::run(){ // actual strategy code
   int idx = -1;
   for(int i=0;i<this->data.size();i++){ // first day from which trading should begin
     if(compare_dates(this->data[i]->date,this->start_date)){
@@ -27,59 +28,46 @@ void Basic::run(){ // actual strategy code
     }
   }
   if(idx==-1) return; // returning if no trading day found
-  
+
   assert(idx+1>=this->x);
-  int signal = 0;
-  deque<int> dq; // a deque to maintain the trends of last x days: 1 if up, -1 if down, 0 is same
-  int tx=x;
-  int k=idx-1;
+  double sq_sum = 0.0;
+  double sum = 0.0;
+  int tx=x; int k=idx-1;
   while(tx--){ // initial setup of variables
-    assert(k>=1);
-    if(this->data[k]->close > this->data[k-1]->close){
-      dq.push_front(1);
-      signal++;
-    }
-    else if(this->data[k]->close < this->data[k-1]->close){
-      dq.push_front(-1);
-      signal--;
-    }
-    else dq.push_front(0);
+    assert(k>=0);
+    sq_sum += this->data[k]->close*this->data[k]->close;
+    sum += this->data[k]->close;
     k--;
   }
 
   for(int i=idx;i<this->data.size();i++){ // doing the trading
-    signal-=dq.front();
-    dq.pop_front();
+    sq_sum -= this->data[i-x]->close*this->data[i-x]->close;
+    sum -= this->data[i-x]->close;
 
-    if(this->data[i]->close > this->data[i-1]->close){
-      dq.push_back(1);
-      signal++;
-    }
-    else if(this->data[i]->close < this->data[i-1]->close){
-      dq.push_back(-1);
-      signal--;
-    }
-    else dq.push_front(0);
-    assert(dq.size()==this->x);
+    sq_sum += this->data[i]->close*this->data[i]->close;
+    sum += this->data[i]->close;
 
-    if(signal==this->x && this->curr_x < this->x){ // BUY the stock
+    double std_dev = sqrt((n*sq_sum)-(sum*sum))/(1.0*this->x);
+    double dma_mean = sum/(1.0*this->x);
+
+    if(this->data[i]->close >= dma_mean+(this->p*std_dev) && this->curr_x < this->x){
       curr_x++;
       this->orders.push_back(new Order(this->data[i]->date,0,1,this->data[i]->close));
       this->bal -= this->data[i]->close;
     }
-    else if(signal==-this->x && this->curr_x > -this->x){ // SELL the stock
+    else if(dma_mean >= this->data[i]->close+(this->p*std_dev) && this->curr_x > -this->x ){
       curr_x--;
       this->orders.push_back(new Order(this->data[i]->date,1,1,this->data[i]->close));
       this->bal += this->data[i]->close;
     }
     this->cashflow.push_back({this->data[i]->date,this->bal});
   }
-
+  
   // squaring off the positions
   this->bal += this->curr_x * this->data.back()->close;
 }
 
-void Basic::run_strategy(){ // calls run and just save the data
+void DMA::run_strategy(){ // calls run and just save the data
   run();
   write_daily_cashflow(this->cashflow);
   write_order_statistics(this->orders);
