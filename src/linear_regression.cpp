@@ -7,6 +7,14 @@
 // Train test split?
 // Normalising the feature matrix
 
+LinearRegression::LinearRegression(){ // default constructor
+
+}
+
+LinearRegression::~LinearRegression(){ // default destructor
+
+}
+
 tuple<Eigen::MatrixXd, Eigen::VectorXd> build_matrix(vector<Stock*>data, int idx){
 
     // open_t-1,high_t-1,low_t-1,close_t-1,no_of_trades_t-1,vwap_t-1,open_t
@@ -77,14 +85,6 @@ vector<double> predict_prices(vector<Stock*> data, Eigen::MatrixXd theta, int id
         predicted_prices.push_back(value(0,0));
     }
     return predicted_prices;
-}
-
-LinearRegression::LinearRegression(){ // default constructor
-
-}
-
-LinearRegression::~LinearRegression(){ // default destructor
-
 }
 
 LinearRegression::LinearRegression(string _code,int _x,int _p,string _start_date,string _end_date){

@@ -44,3 +44,8 @@ struct LinearRegression{
   void run();
   void run_strategy();
 };
+
+tuple<Eigen::MatrixXd, Eigen::VectorXd> build_matrix(vector<Stock*>data, int idx);
+Eigen::MatrixXd add_one(Eigen::MatrixXd X);
+Eigen::MatrixXd linear_regression(Eigen::MatrixXd X, Eigen::VectorXd Y);
+vector<double> predict_prices(vector<Stock*> data, Eigen::MatrixXd theta, int idx);
