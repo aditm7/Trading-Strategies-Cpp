@@ -22,9 +22,13 @@ int main(int argc,char* argv[]){
     DMApp* dmapp_strategy = new DMApp(argv[2],stoi(argv[3]),stoi(argv[4]),stoi(argv[5]),stoi(argv[6]),stod(argv[7]),stod(argv[8]),argv[9],argv[10]);
     dmapp_strategy->run_strategy();
   }
-  if(strategy=="MACD"){
+  else if(strategy=="MACD"){
     MACD* macd_strategy = new MACD(argv[2],stoi(argv[3]),argv[4],argv[5]);
     macd_strategy->run_strategy();
+  }
+  else if(strategy=="RSI"){
+    RSI* rsi_strategy = new RSI(argv[2],stoi(argv[3]),stoi(argv[4]),stod(argv[5]),stod(argv[6]),argv[7],argv[8]);
+    rsi_strategy->run_strategy();
   }
   else if(strategy=="LINEAR_REGRESSION"){
     LinearRegression* linreg_strategy = new LinearRegression(argv[2],stoi(argv[3]),stoi(argv[4]),argv[5],argv[6]);

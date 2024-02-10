@@ -31,7 +31,7 @@ void Basic::run(){ // actual strategy code
   assert(idx+1>=this->n);
   int signal = 0;
   deque<int> dq; // a deque to maintain the trends of last x days: 1 if up, -1 if down, 0 is same
-  int tn=n;
+  int tn=this->n;
   int k=idx-1;
   while(tn--){ // initial setup of variables
     assert(k>=1);

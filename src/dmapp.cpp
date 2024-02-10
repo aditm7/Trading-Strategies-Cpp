@@ -37,7 +37,7 @@ void DMApp::run(){ // actual strategy code
   double last_sf = 0.5;
   double last_ama = this->data[idx]->close;
   deque<int> dq;
-  int tn=n; int k=idx-1;
+  int tn=this->n; int k=idx-1;
   while(tn--){ // initial setup of variables
     assert(k>=0);
     sum_abs += abs(this->data[k]->close-this->data[k-1]->close);
