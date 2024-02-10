@@ -37,3 +37,4 @@ data/*.csv
 *.csv
 *.txt
 .vscode/
+.DS_Store

@@ -55,3 +55,22 @@ ostream& operator<<(ostream& os,Order*& order){
   os << "Price: " << order->price << " }";
   return os;
 }
+
+//-------Helper functions ------
+
+bool compare_dates(string &s1,string &s2){
+  int day1, month1, year1, day2, month2, year2;  
+  sscanf(s1.c_str(), "%d/%d/%d", &day1, &month1, &year1);
+  sscanf(s2.c_str(), "%d/%d/%d", &day2, &month2, &year2);
+  
+  if(year1<year2) return false;
+  else if(year1>year2) return true;
+  else{
+    if(month1<month2) return false;
+    else if(month1>month2) return true;
+    else{
+      if(day1<day2) return false;
+      else return true;
+    }
+  }
+}
