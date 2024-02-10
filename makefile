@@ -24,3 +24,4 @@ $(TARGET): $(OBJS)
 .PHONY: clean all
 clean:
 	@rm -f $(BINDIR)/*.o $(BINDIR)/*.d $(BINDIR)/main*
+	@rm -f *.csv *.txt
