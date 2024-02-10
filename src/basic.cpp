@@ -19,7 +19,7 @@ Basic::Basic(string _code,int _n,int _x,string _start_date,string _end_date){
 }
 
 void Basic::run(){ // actual strategy code
-  debug(this->data[0]);
+  debug(this->data);
 }
 
 void Basic::run_strategy(){ // calls run and just save the data
