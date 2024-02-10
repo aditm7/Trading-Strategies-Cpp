@@ -30,7 +30,7 @@ struct LinearRegression{
   string end_date;
 
   int curr_x=0;
-  double final_pnl=0;
+  double bal=0;
   vector<Stock*> train_data;
   vector<Stock*> trade_data;
   vector<Order*> orders;

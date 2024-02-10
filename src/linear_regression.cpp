@@ -7,9 +7,7 @@
 // Train test split?
 // Normalising the feature matrix
 
-tuple<Eigen::MatrixXd, Eigen::VectorXd> build_matrix(vector<Stock*>data, string start_date){
-    // TODO: iterate the dates and reach the working date just before start date
-    int itr=1;
+tuple<Eigen::MatrixXd, Eigen::VectorXd> build_matrix(vector<Stock*>data, int idx){
 
     // open_t-1,high_t-1,low_t-1,close_t-1,no_of_trades_t-1,vwap_t-1,open_t
     // close_t
@@ -18,12 +16,12 @@ tuple<Eigen::MatrixXd, Eigen::VectorXd> build_matrix(vector<Stock*>data, string 
     int f=7;
     Eigen::MatrixXd X(n,f);
     Eigen::VectorXd Y(n);
-    for(int i=itr;i<data.size();i++){
-        Y(i-itr)=data[i]->close;
+    for(int i=idx;i<data.size();i++){
+        Y(i-idx)=data[i]->close;
 
         Eigen::RowVectorXd row(f);
-        row << data[i-1]->open, data[i-1]->high, data[i-1]->low, data[i-1]->close, data[i-1]->vwap, data[i-1]->num_trades, data[i]->open;
-        X.row(i-itr) = row;
+        row << data[i-1]->high, data[i-1]->low, data[i-1]->close, data[i-1]->open, data[i-1]->vwap, data[i-1]->num_trades, data[i]->open;
+        X.row(i-idx) = row;
     }
 
     tuple<Eigen::MatrixXd, Eigen::VectorXd> out = tuple<Eigen::MatrixXd, Eigen::VectorXd>(X,Y);
@@ -60,16 +58,16 @@ Eigen::MatrixXd linear_regression(Eigen::MatrixXd X, Eigen::VectorXd Y){
     return theta;
 }
 
-vector<double> predict_prices(vector<Stock*> data, Eigen::MatrixXd theta, string start_date){
+vector<double> predict_prices(vector<Stock*> data, Eigen::MatrixXd theta, int idx){
     vector<double>predicted_prices;
 
     // date,open,high,low,close,no_of_trades,vwap
-    tuple<Eigen::MatrixXd, Eigen::VectorXd> tuple = build_matrix(data, start_date);
+    tuple<Eigen::MatrixXd, Eigen::VectorXd> tuple = build_matrix(data, idx);
     Eigen::MatrixXd X = get<0>(tuple);
     Eigen::VectorXd Y = get<1>(tuple);
 
-    cout<<X<<endl;
-    cout<<Y<<endl;
+    cout<<X.row(0)<<endl;
+    cout<<Y.row(0)<<endl;
 
     // Add intercept to X
     Eigen::MatrixXd X_with_intercept = add_one(X);
@@ -101,21 +99,51 @@ LinearRegression::LinearRegression(string _code,int _x,int _p,string _start_date
 }
 
 void LinearRegression::run(){ // actual strategy code
-  // Make X,Y matrix from the csv data
-  tuple<Eigen::MatrixXd, Eigen::VectorXd> tuple = build_matrix(this->train_data, this->start_date);
+  // Make X,Y matrix from the csv train data
+  tuple<Eigen::MatrixXd, Eigen::VectorXd> tuple = build_matrix(this->train_data, 1);
   Eigen::MatrixXd X = get<0>(tuple);
   Eigen::VectorXd Y = get<1>(tuple);
   // Obtain parameters for linear regression
   Eigen::MatrixXd theta = linear_regression(X, Y);
 
+  // first day from which trading should begin
+  int idx = 0;
+  for(int i=0;i<this->train_data.size();i++){
+    if(compare_dates(this->trade_data[i]->date,this->start_date)){
+      idx = i;
+      break;
+    }
+  }
   // Predict price for each day
-  // starting from data[1] --> end
-  vector<double>predicted_prices = predict_prices(trade_data, theta, this->start_date);
+  assert(idx-1>=0);
+  vector<double>predicted_prices = predict_prices(this->trade_data, theta, idx);
+
+  // Placing orders
+  for(int i=idx;i<this->trade_data.size();i++){ // doing the trading
+    double actual_price = trade_data[i]->close;
+    double predicted_price = predicted_prices[i-idx];
+
+    double percentageDifference = ((predicted_price - actual_price) / actual_price) * 100;
+
+    // If predicted price is more than actual price by threshold percentage, // BUY the stock
+    if (percentageDifference >= this->p && this->curr_x < this->x) {
+        this->curr_x++;
+        this->orders.push_back(new Order(this->trade_data[i]->date,0,1,this->trade_data[i]->close));
+        this->bal -= this->trade_data[i]->close;
+    }
+    // If predicted price is less than actual price by threshold percentage, // SELL the stock
+    else if (percentageDifference <= -(this->p) && this->curr_x > -this->x) {
+        this->curr_x--;
+        this->orders.push_back(new Order(this->trade_data[i]->date,1,1,this->trade_data[i]->close));
+        this->bal += this->trade_data[i]->close;
+    }
+    this->cashflow.push_back({this->trade_data[i]->date,this->bal});
+  }
 }
 
 void LinearRegression::run_strategy(){ // calls run and just save the data
   run();
   write_daily_cashflow(this->cashflow);
   write_order_statistics(this->orders);
-  write_to_txt(this->final_pnl);
+  write_to_txt(this->bal);
 }
