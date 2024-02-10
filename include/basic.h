@@ -1,6 +1,8 @@
 #include "csv.h"
 #include "stock.h"
 #include "debug.h"
+#include <cassert>
+#include <deque>
 
 using namespace std;
 
@@ -12,7 +14,7 @@ struct Basic{
   string end_date;
 
   int curr_x=0;
-  double final_pnl=0;
+  double bal=0;
   vector<Stock*> data;
   vector<Order*> orders;
   vector<pair<string,double>> cashflow;

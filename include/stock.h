@@ -1,6 +1,10 @@
 #pragma once
 #include<string>
 #include <iostream>
+#include <cstdio>
+#include <string>
+#include "debug.h"
+
 using namespace std;
 
 struct Stock{
@@ -30,3 +34,4 @@ struct Order{
   friend ostream& operator<<(ostream& os,Order* &order);
 };
 
+bool compare_dates(string &s1,string &s2); // returns true if s1>=s2 and false if s1<s2
