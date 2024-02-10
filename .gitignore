@@ -26,6 +26,7 @@ bin/*.o
 *.a
 *.lib
 
+
 # Executables
 *.exe
 *.out
@@ -33,3 +34,5 @@ bin/*.o
 
 #Data files
 data/*.csv
+
+.vscode/

@@ -1,5 +1,4 @@
-#include<main.h>
-#include<linear_regression.h>
+#include "main.h"
 
 int main(int argc,char* argv[]){
   #ifdef DEBUG
@@ -13,13 +12,12 @@ int main(int argc,char* argv[]){
   string strategy = argv[1];
   if(strategy=="BASIC"){
     // code for BASIC
-    cout<<argc<<endl;
   }
   else if(strategy=="DMA"){
 
   }
   else if(strategy=="LINEAR_REGRESSION"){
-    read_csv("./data/SBIN.csv");
+
   }
 
   return 0;

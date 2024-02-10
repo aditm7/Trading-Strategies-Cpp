@@ -10,28 +10,18 @@ import sys
 # Required headers are: Date, Open Price, Close Price, High, Low, Last Trade Price (LTP), Volume, Value and Number of Trades
 stock_select_headers = [ "CH_TIMESTAMP", 
                     "CH_OPENING_PRICE", "CH_TRADE_HIGH_PRICE",
-                    "CH_TRADE_LOW_PRICE",
-                    "CH_LAST_TRADED_PRICE", "CH_CLOSING_PRICE",
-                    "CH_TOT_TRADED_QTY", "CH_TOT_TRADED_VAL", "CH_TOTAL_TRADES", "VWAP", "CH_SYMBOL"]
+                    "CH_TRADE_LOW_PRICE","CH_CLOSING_PRICE",
+                    "VWAP","CH_TOTAL_TRADES"]
 stock_final_headers = [ "date",
                     "open", "high",
-                    "low",
-                    "ltp", "close",
-                    "volume", "value", "no_of_trades", "vwap", "symbol"]
+                    "low","close",
+                    "vwap","no_of_trades"]
 stock_dtypes = [ ut.np_date,
             ut.np_float, ut.np_float,
-            ut.np_float,
             ut.np_float, ut.np_float,
-            ut.np_int, ut.np_float, ut.np_int, ut.np_float, str]
+            ut.np_float, ut.np_int]
 
-stock_code = str(sys.argv[2])
-from_date = datetime.strptime(str(sys.argv[3]), '%d/%m/%Y').date()
-to_date = datetime.strptime(str(sys.argv[4]), '%d/%m/%Y').date()
-
-if(len(sys.argv)==5): # subtract the number of days accordingly n passed
-  from_date = from_date - timedelta(days=max(10,int(sys.argv[4])*2))
-
-def fetch_raw_data():
+def fetch_raw_data(stock_code,from_date,to_date):
   raw = stock_raw(symbol=stock_code,from_date=from_date,to_date = to_date)
   final_raw = []
   for r in raw:
@@ -43,18 +33,31 @@ def fetch_raw_data():
       final_raw.append(new_dict)
   return final_raw
 
-def save_csv(data):
+def save_csv(data,filename):
   df = pd.DataFrame(data)
   df['date'] = df['date'].dt.strftime('%d/%m/%Y')
   df=df.iloc[::-1]
-  df.to_csv(f'data/{stock_code}.csv', index=False)
+  df.to_csv(f'data/{filename}.csv', index=False)
+
+strategy = str(sys.argv[1])
+stock_code = str(sys.argv[2])
 
 try:
-  file_path = f'data/{stock_code}.csv'
-  raw = fetch_raw_data()
-  save_csv(raw)
+  if strategy=="BASIC" or strategy=="DMA" or strategy=="DMA++" or strategy=="RSI":
+    from_date = datetime.strptime(str(sys.argv[4]), '%d/%m/%Y').date()
+    to_date = datetime.strptime(str(sys.argv[5]), '%d/%m/%Y').date()
+
+    from_date = from_date - timedelta(days=max(20,2*(int)(sys.argv[3])))
+    raw = fetch_raw_data(stock_code,from_date,to_date)
+    save_csv(raw,stock_code)
+  
+  elif strategy=="MACD":
+    from_date = datetime.strptime(str(sys.argv[3]), '%d/%m/%Y').date()
+    to_date = datetime.strptime(str(sys.argv[4]), '%d/%m/%Y').date()
+    raw = fetch_raw_data(stock_code,from_date,to_date)
+    save_csv(raw,stock_code)
+  
   print(f"Success for {stock_code}")
 
 except Exception as e:
-  print(0)
   print(f"An error occurred with stock code {stock_code},{str(e)}")
