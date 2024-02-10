@@ -28,12 +28,12 @@ void Basic::run(){ // actual strategy code
   }
   if(idx==-1) return; // returning if no trading day found
   
-  assert(idx+1>=this->x);
+  assert(idx+1>=this->n);
   int signal = 0;
   deque<int> dq; // a deque to maintain the trends of last x days: 1 if up, -1 if down, 0 is same
-  int tx=x;
+  int tn=n;
   int k=idx-1;
-  while(tx--){ // initial setup of variables
+  while(tn--){ // initial setup of variables
     assert(k>=1);
     if(this->data[k]->close > this->data[k-1]->close){
       dq.push_front(1);
@@ -60,7 +60,7 @@ void Basic::run(){ // actual strategy code
       signal--;
     }
     else dq.push_front(0);
-    assert(dq.size()==this->x);
+    assert(dq.size()==this->n);
 
     if(signal==this->x && this->curr_x < this->x){ // BUY the stock
       curr_x++;

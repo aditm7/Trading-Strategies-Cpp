@@ -29,11 +29,11 @@ void DMA::run(){ // actual strategy code
   }
   if(idx==-1) return; // returning if no trading day found
 
-  assert(idx+1>=this->x);
+  assert(idx+1>=this->n);
   double sq_sum = 0.0;
   double sum = 0.0;
-  int tx=x; int k=idx-1;
-  while(tx--){ // initial setup of variables
+  int tn=n; int k=idx-1;
+  while(tn--){ // initial setup of variables
     assert(k>=0);
     sq_sum += this->data[k]->close*this->data[k]->close;
     sum += this->data[k]->close;
@@ -41,14 +41,14 @@ void DMA::run(){ // actual strategy code
   }
 
   for(int i=idx;i<this->data.size();i++){ // doing the trading
-    sq_sum -= this->data[i-x]->close*this->data[i-x]->close;
-    sum -= this->data[i-x]->close;
+    sq_sum -= this->data[i-n]->close*this->data[i-n]->close;
+    sum -= this->data[i-n]->close;
 
     sq_sum += this->data[i]->close*this->data[i]->close;
     sum += this->data[i]->close;
 
-    double std_dev = sqrt((n*sq_sum)-(sum*sum))/(1.0*this->x);
-    double dma_mean = sum/(1.0*this->x);
+    double std_dev = sqrt((n*sq_sum)-(sum*sum))/(1.0*this->n);
+    double dma_mean = sum/(1.0*this->n);
 
     if(this->data[i]->close >= dma_mean+(this->p*std_dev) && this->curr_x < this->x){
       curr_x++;
