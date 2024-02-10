@@ -12,17 +12,17 @@ stock_select_headers = [ "CH_TIMESTAMP",
                     "CH_OPENING_PRICE", "CH_TRADE_HIGH_PRICE",
                     "CH_TRADE_LOW_PRICE",
                     "CH_LAST_TRADED_PRICE", "CH_CLOSING_PRICE",
-                    "CH_TOT_TRADED_QTY", "CH_TOT_TRADED_VAL", "CH_TOTAL_TRADES","CH_SYMBOL"]
+                    "CH_TOT_TRADED_QTY", "CH_TOT_TRADED_VAL", "CH_TOTAL_TRADES", "VWAP", "CH_SYMBOL"]
 stock_final_headers = [ "date",
                     "open", "high",
                     "low",
                     "ltp", "close",
-                    "volume", "value", "no_of_trades","symbol"]
+                    "volume", "value", "no_of_trades", "vwap", "symbol"]
 stock_dtypes = [ ut.np_date,
             ut.np_float, ut.np_float,
             ut.np_float,
             ut.np_float, ut.np_float,
-            ut.np_int, ut.np_float, ut.np_int,str]
+            ut.np_int, ut.np_float, ut.np_int, ut.np_float, str]
 
 stock_code = str(sys.argv[2])
 from_date = datetime.strptime(str(sys.argv[3]), '%d/%m/%Y').date()

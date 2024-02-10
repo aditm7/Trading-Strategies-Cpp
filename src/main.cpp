@@ -1,4 +1,5 @@
 #include<main.h>
+#include<linear_regression.h>
 
 int main(int argc,char* argv[]){
   #ifdef DEBUG
@@ -16,6 +17,9 @@ int main(int argc,char* argv[]){
   }
   else if(strategy=="DMA"){
 
+  }
+  else if(strategy=="LINEAR_REGRESSION"){
+    read_csv("./data/SBIN.csv");
   }
 
   return 0;

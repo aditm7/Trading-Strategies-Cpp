@@ -1,2 +1,1 @@
-./bin/main       
-make: *** [all] Segmentation fault: 11
+Insufficient arguments, exiting ....
