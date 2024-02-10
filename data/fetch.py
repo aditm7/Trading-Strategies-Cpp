@@ -46,8 +46,9 @@ try:
   if strategy=="BASIC" or strategy=="DMA" or strategy=="DMA++" or strategy=="RSI":
     from_date = datetime.strptime(str(sys.argv[4]), '%d/%m/%Y').date()
     to_date = datetime.strptime(str(sys.argv[5]), '%d/%m/%Y').date()
-
-    from_date = from_date - timedelta(days=max(20,2*(int)(sys.argv[3])))
+    
+    from_date = from_date - timedelta(days=max(20,min(4*(int)(sys.argv[3]),1000)))
+    
     raw = fetch_raw_data(stock_code,from_date,to_date)
     save_csv(raw,stock_code)
   

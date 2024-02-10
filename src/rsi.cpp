@@ -12,8 +12,8 @@ RSI::RSI(string _code,int _n,int _x,double _oversold_threshold,double _overbough
   this->stock_code = _code;
   this->n = _n;
   this->x = _x;
-  this->oversold_threshold = oversold_threshold;
-  this->overbought_threshold = overbought_threshold;
+  this->oversold_threshold = _oversold_threshold;
+  this->overbought_threshold = _overbought_threshold;
   this->start_date = _start_date; 
   this->end_date = _end_date;
 
