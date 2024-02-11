@@ -51,8 +51,10 @@ void ADX::run(){ // actual strategy code
       double new_atr = last_atr + (2.0/(1.0*this->n+1.0))*(new_tr - last_atr);
       double new_di1 = last_di1 + (2.0/(1.0*this->n+1.0))*((new_dm1/new_atr) - last_di1);
       double new_di0 = last_di0 + (2.0/(1.0*this->n+1.0))*((new_dm0/new_atr) - last_di0);
-      double new_dx = ((new_di1-new_di0)/(new_di1+new_di0))*100.0;
+      double new_dx = (abs(new_di1+new_di0-0.0)!=0.0 ? ((new_di1-new_di0)/(new_di1+new_di0))*100.0 : 0.0);
       double new_adx = last_adx + (2.0/(1.0*this->n+1.0))*(new_dx - last_adx);
+
+      // if(abs(new_di1+new_di0)!=0.0) debug(new_di1+new_di0);
 
       last_tr = new_tr; last_dm1 = new_dm1; last_dm0 = new_dm0;
       last_atr = new_atr; last_di1 = new_di1; last_di0 = new_di0;
