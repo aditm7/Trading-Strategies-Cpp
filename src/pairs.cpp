@@ -32,31 +32,28 @@ void Pairs::run(){ // actual strategy code
     }
   }
   if(idx==-1) return; // returning if no trading day found
-  
+
   assert(idx+1>=this->n);
-
-  // Finding initial sum and sum of squares
+  double sq_sum = 0.0;
   double sum = 0.0;
-  for (int i = idx-1; i > idx-this->n; i--) {
-    sum += (data_1[i]->close -  data_2[i]->close);
-  }
-  double sumSquares = 0.0;
-  for (int i = idx-1; i > idx-this->n; i--) {
-    sumSquares += (data_1[i]->close -  data_2[i]->close) * (data_1[i]->close -  data_2[i]->close);
+  int tn=this->n; int k=idx-1;
+  while(tn--){ // initial setup of variables
+    assert(k>=0);
+    sq_sum += (this->data_1[k]->close - this->data_2[k]->close)*(this->data_1[k]->close - this->data_2[k]->close);
+    sum += (this->data_1[k]->close - this->data_2[k]->close);
+    k--;
   }
 
-  // Calculating rolling mean and standard deviation
-  for (int i = idx; i < data_1.size(); i++) {
-    // Rolling mean
-    sum += (data_1[i]->close -  data_2[i]->close);
-    double rolling_mean = sum/this->n;
-    sum -= (data_1[i-this->n+1]->close -  data_2[i-this->n+1]->close);
+  for(int i=idx;i<this->data_1.size();i++){ // doing the trading
+    sq_sum -= (this->data_1[i-n]->close - this->data_2[i-n]->close)*(this->data_1[i-n]->close - this->data_2[i-n]->close);
+    sum -= (this->data_1[i-n]->close - this->data_2[i-n]->close);
 
-    // Rollign std deviation
-    sumSquares += (data_1[i]->close -  data_2[i]->close) * (data_1[i]->close -  data_2[i]->close);
-    double std_dev = sqrt((sumSquares / this->n) - (rolling_mean * rolling_mean));
-    sumSquares -= (data_1[i-this->n+1]->close -  data_2[i-this->n+1]->close) * (data_1[i-this->n+1]->close -  data_2[i-this->n+1]->close);
-    
+    sq_sum += (this->data_1[i]->close - this->data_2[i]->close)*(this->data_1[i]->close - this->data_2[i]->close);
+    sum += (this->data_1[i]->close - this->data_2[i]->close);
+
+    double std_dev = sqrt((n*sq_sum)-(sum*sum))/(1.0*this->n);
+    double rolling_mean = sum/(1.0*this->n);
+
     // Z-score
     double z_score = ((data_1[i]->close -  data_2[i]->close) - rolling_mean) / std_dev;
 
