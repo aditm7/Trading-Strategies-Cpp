@@ -77,6 +77,21 @@ try:
     raw = fetch_raw_data(stock_code,train_from_date,train_to_date)
     save_csv(raw,'train')
   
+  elif strategy=="BEST_OF_ALL":
+    from_date = datetime.strptime(str(sys.argv[3]), '%d/%m/%Y').date()
+    from_date = from_date - timedelta(days=200)
+    to_date = datetime.strptime(str(sys.argv[4]), '%d/%m/%Y').date()
+    raw = fetch_raw_data(stock_code,from_date,to_date)
+    save_csv(raw,stock_code)
+
+    train_from_date = datetime.strptime(str(sys.argv[3]), '%d/%m/%Y').date()
+    train_from_date = train_from_date - timedelta(days=365)
+    train_to_date = datetime.strptime(str(sys.argv[4]), '%d/%m/%Y').date()
+    train_to_date = train_to_date - timedelta(days=365)
+    print(train_from_date,train_to_date)
+    raw = fetch_raw_data(stock_code,train_from_date,train_to_date)
+    save_csv(raw,'train')
+  
   elif strategy=="PAIRS":
     stock_code_1 = sys.argv[2]
     stock_code_2 = sys.argv[3]

@@ -89,7 +89,7 @@ void Pairs::run(){ // actual strategy code
 void Pairs::run_strategy(){ // calls run and just save the data
   run();
   write_daily_cashflow(this->cashflow);
-  write_order_statistics(this->orders_1, "order_statisitcs_1.csv");
-  write_order_statistics(this->orders_2, "order_statisitcs_2.csv");
+  write_order_statistics(this->orders_1, "order_statistics_1.csv");
+  write_order_statistics(this->orders_2, "order_statistics_2.csv");
   write_to_txt(this->bal);
 }
