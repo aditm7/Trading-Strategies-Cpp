@@ -1,3 +1,4 @@
+#pragma once
 #include "csv.h"
 #include "stock.h"
 #include "debug.h"

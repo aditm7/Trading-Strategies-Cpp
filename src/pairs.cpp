@@ -58,33 +58,25 @@ void Pairs::run(){ // actual strategy code
     double z_score = ((data_1[i]->close -  data_2[i]->close) - rolling_mean) / std_dev;
 
     // Placing trade
-    if(z_score > this->threshold){ // SELL S1, BUY S2
-        if(this->curr_x_1 > -this->x && this->curr_x_2 < this->x){
-            this->curr_x_1--;
-            this->curr_x_2++;
-
-            // Sell S1
-            this->orders_1.push_back(new Order(this->data_1[i]->date,1,1,this->data_1[i]->close));
-            this->bal += this->data_1[i]->close;
-
-            // Buy S2
-            this->orders_2.push_back(new Order(this->data_2[i]->date,0,1,this->data_2[i]->close));
-            this->bal -= this->data_2[i]->close;
-        }
+    if(z_score > this->threshold && this->curr_x_1 > -this->x && this->curr_x_2 < this->x){ // SELL S1, BUY S2
+      this->curr_x_1--;
+      this->curr_x_2++;
+      // Sell S1
+      this->orders_1.push_back(new Order(this->data_1[i]->date,1,1,this->data_1[i]->close));
+      this->bal += this->data_1[i]->close;
+      // Buy S2
+      this->orders_2.push_back(new Order(this->data_2[i]->date,0,1,this->data_2[i]->close));
+      this->bal -= this->data_2[i]->close;
     }
-    else if(z_score < -this->threshold){ // BUY S1, SELL S2
-        if(this->curr_x_2 > -this->x && this->curr_x_1 < this->x){
-            this->curr_x_2--;
-            this->curr_x_1++;
-
-            // Sell S2
-            this->orders_2.push_back(new Order(this->data_2[i]->date,1,1,this->data_2[i]->close));
-            this->bal += this->data_2[i]->close;
-
-            // Buy S1
-            this->orders_1.push_back(new Order(this->data_1[i]->date,0,1,this->data_1[i]->close));
-            this->bal -= this->data_1[i]->close;
-        }
+    else if(z_score < -this->threshold && this->curr_x_2 > -this->x && this->curr_x_1 < this->x){ // BUY S1, SELL S2
+      this->curr_x_2--;
+      this->curr_x_1++;
+      // Sell S2
+      this->orders_2.push_back(new Order(this->data_2[i]->date,1,1,this->data_2[i]->close));
+      this->bal += this->data_2[i]->close;
+      // Buy S1
+      this->orders_1.push_back(new Order(this->data_1[i]->date,0,1,this->data_1[i]->close));
+      this->bal -= this->data_1[i]->close;
     }
     this->cashflow.push_back({this->data_1[i]->date,this->bal});
   }

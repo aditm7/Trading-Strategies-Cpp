@@ -39,6 +39,7 @@ void RSI::run(){ // actual strategy code
     assert(k>=1);
     sum_gain += max(this->data[k]->close - this->data[k-1]->close,0.0);
     sum_loss += max(this->data[k-1]->close - this->data[k]->close,0.0);
+    k--;
   }
   for(int i=idx;i<this->data.size();i++){ // doing the trading
     sum_gain -= max(this->data[i-n]->close - this->data[i-n-1]->close,0.0);
@@ -46,8 +47,12 @@ void RSI::run(){ // actual strategy code
     sum_loss -= max(this->data[i-n-1]->close - this->data[i-n]->close,0.0);
     sum_loss += max(this->data[i-1]->close - this->data[i]->close,0.0);
     
-    double rs = sum_gain/sum_loss;
-    double rsi = 100.0 - (100.0/(1.0+rs));
+    double rs,rsi;
+    if(sum_loss==0.0) rsi = 100.0;
+    else{
+      rs = sum_gain/sum_loss;
+      rsi = 100.0 - (100.0/(1.0+rs));
+    }
     if(rsi < this->oversold_threshold && this->curr_x < this->x){ // BUY the stock
       curr_x++;
       this->orders.push_back(new Order(this->data[i]->date,0,1,this->data[i]->close));
