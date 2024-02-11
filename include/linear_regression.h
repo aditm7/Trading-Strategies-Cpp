@@ -1,7 +1,4 @@
 #pragma once
-
-#include <stock.h>
-#include <Eigen/Dense>
 #include <string>
 #include <iostream>
 
@@ -10,6 +7,7 @@ using namespace std;
 #include "csv.h"
 #include "stock.h"
 #include "debug.h"
+#include "matrix.h"
 
 struct LinearRegression{
   string stock_code;
@@ -34,7 +32,7 @@ struct LinearRegression{
   void run_strategy();
 };
 
-tuple<Eigen::MatrixXd, Eigen::VectorXd> build_matrix(vector<Stock*>data, int idx);
-Eigen::MatrixXd add_one(Eigen::MatrixXd X);
-Eigen::MatrixXd linear_regression(Eigen::MatrixXd X, Eigen::VectorXd Y);
-vector<double> predict_prices(vector<Stock*> data, Eigen::MatrixXd theta, int idx);
+tuple<vector<vector<double>>, vector<double>> build_matrix(vector<Stock*>data, int idx);
+vector<vector<double>> add_one(vector<vector<double>> X);
+vector<vector<double>> linear_regression(vector<vector<double>> X, vector<double> Y);
+vector<double> predict_prices(vector<Stock*> data, vector<vector<double>> theta, int idx);

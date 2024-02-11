@@ -15,74 +15,79 @@ LinearRegression::~LinearRegression(){ // default destructor
 
 }
 
-tuple<Eigen::MatrixXd, Eigen::VectorXd> build_matrix(vector<Stock*>data, int idx){
+tuple<vector<vector<double>>, vector<double>> build_matrix(vector<Stock*>data, int idx){
 
     // open_t-1,high_t-1,low_t-1,close_t-1,no_of_trades_t-1,vwap_t-1,open_t
     // close_t
     // Matrix X,Y
-    int n=data.size()-1;
+    int n=data.size()-idx;
     int f=7;
-    Eigen::MatrixXd X(n,f);
-    Eigen::VectorXd Y(n);
+    vector<vector<double>>X(n, vector<double>(f,0));
+    vector<double>Y(n,0);
     for(int i=idx;i<data.size();i++){
-        Y(i-idx)=data[i]->close;
+        Y[i-idx]=data[i]->close;
 
-        Eigen::RowVectorXd row(f);
-        row << data[i-1]->high, data[i-1]->low, data[i-1]->close, data[i-1]->open, data[i-1]->vwap, data[i-1]->num_trades, data[i]->open;
-        X.row(i-idx) = row;
+        vector<double>row = {data[i-1]->high, data[i-1]->low, data[i-1]->close, data[i-1]->open, data[i-1]->vwap, double(data[i-1]->num_trades), data[i]->open};
+        X[i-idx] = row;
     }
 
-    tuple<Eigen::MatrixXd, Eigen::VectorXd> out = tuple<Eigen::MatrixXd, Eigen::VectorXd>(X,Y);
+    tuple<vector<vector<double>>, vector<double>> out = tuple<vector<vector<double>>, vector<double>>(X,Y);
     return out;
 }
 
-Eigen::MatrixXd add_one(Eigen::MatrixXd X){
-    Eigen::MatrixXd X_new(X.rows(), X.cols() + 1);
-    X_new << Eigen::MatrixXd::Ones(X.rows(), 1), X;
+vector<vector<double>> add_one(vector<vector<double>> X){
+    vector<vector<double>> X_new(X.size(), vector<double>(X[0].size() + 1));
+    for(int i=0;i<X.size();i++){
+      vector<double>row = X[i];
+      row.push_back(1.0);
+      X_new[i] = row;
+    }
     return X_new;
 }
 
-Eigen::MatrixXd linear_regression(Eigen::MatrixXd X, Eigen::VectorXd Y){
+vector<vector<double>> linear_regression(vector<vector<double>> X, vector<double>Y){
     // X: Feature matrix (n x m)
     // Y: Target vector (n x 1)
     // n x m+1
-    Eigen::MatrixXd X_with_intercept = add_one(X);
+    vector<vector<double>> X_with_intercept = add_one(X);
 
     // X_T(m+1 x n)
-    Eigen::MatrixXd X_transpose = X_with_intercept.transpose();
+    vector<vector<double>> X_transpose = transpose(X_with_intercept);
 
     // Square X (m+1 x m+1)
-    Eigen::MatrixXd X2 = X_transpose * X_with_intercept;
+    vector<vector<double>> X2 = multiply(X_transpose, X_with_intercept);
 
     // X_T * Y (m+1 x 1)
-    Eigen::MatrixXd XtY = X_transpose * Y;
+    // Convert Y into nx1
+    vector<vector<double>>Y_new(Y.size(),vector<double>(1));
+    for(int i=0;i<Y.size();i++){
+      Y_new[i]={Y[i]};
+    }
+    vector<vector<double>> XtY = multiply(X_transpose, Y_new);
 
     // Inverse of X2
-    Eigen::MatrixXd X2_inverse = X2.inverse();
+    vector<vector<double>> X2_inverse = inverse(X2);
 
     // Coefficients (m x 1)
-    Eigen::MatrixXd theta = X2_inverse * XtY;
+    vector<vector<double>> theta =multiply(X2_inverse, XtY);
 
     return theta;
 }
 
-vector<double> predict_prices(vector<Stock*> data, Eigen::MatrixXd theta, int idx){
+vector<double> predict_prices(vector<Stock*> data, vector<vector<double>> theta, int idx){
     vector<double>predicted_prices;
 
     // date,open,high,low,close,no_of_trades,vwap
-    tuple<Eigen::MatrixXd, Eigen::VectorXd> tuple = build_matrix(data, idx);
-    Eigen::MatrixXd X = get<0>(tuple);
-    Eigen::VectorXd Y = get<1>(tuple);
-
-    cout<<X.row(0)<<endl;
-    cout<<Y.row(0)<<endl;
+    tuple<vector<vector<double>>, vector<double>> tuple = build_matrix(data, idx);
+    vector<vector<double>> X = get<0>(tuple);
+    vector<double> Y = get<1>(tuple);
 
     // Add intercept to X
-    Eigen::MatrixXd X_with_intercept = add_one(X);
+    vector<vector<double>> X_with_intercept = add_one(X);
 
-    for(int i=0;i<X_with_intercept.rows();i++){
-        Eigen::MatrixXd value = X_with_intercept.row(i) * theta;
-        predicted_prices.push_back(value(0,0));
+    for(int i=0;i<X_with_intercept.size();i++){
+        vector<vector<double>> value = multiply({X_with_intercept[i]}, theta);
+        predicted_prices.push_back(value[0][0]);
     }
     return predicted_prices;
 }
@@ -100,11 +105,11 @@ LinearRegression::LinearRegression(string _code,int _x,int _p,string _start_date
 
 void LinearRegression::run(){ // actual strategy code
   // Make X,Y matrix from the csv train data
-  tuple<Eigen::MatrixXd, Eigen::VectorXd> tuple = build_matrix(this->train_data, 1);
-  Eigen::MatrixXd X = get<0>(tuple);
-  Eigen::VectorXd Y = get<1>(tuple);
+  tuple<vector<vector<double>>, vector<double>> tuple = build_matrix(this->train_data, 1);
+  vector<vector<double>> X = get<0>(tuple);
+  vector<double> Y = get<1>(tuple);
   // Obtain parameters for linear regression
-  Eigen::MatrixXd theta = linear_regression(X, Y);
+  vector<vector<double>> theta = linear_regression(X, Y);
 
   // first day from which trading should begin
   int idx = -1;
