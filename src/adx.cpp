@@ -61,12 +61,12 @@ void ADX::run(){ // actual strategy code
       last_dx = new_dx; last_adx = new_adx;
     }
 
-    if(last_adx > this->adx_threshold && this->curr_x < this->x){ // BUY the stock
+    if(last_adx > this->adx_threshold && (last_di1+last_di0-0.0)!=0.0 && this->curr_x < this->x){ // BUY the stock
       curr_x++;
       this->orders.push_back(new Order(this->data[i]->date,0,1,this->data[i]->close));
       this->bal -= this->data[i]->close;
     }
-    else if(last_adx < this->adx_threshold && this->curr_x > -this->x){ // SELL the stock
+    else if(last_adx < this->adx_threshold && (last_di1+last_di0-0.0)!=0.0 && this->curr_x > -this->x){ // SELL the stock
       curr_x--;
       this->orders.push_back(new Order(this->data[i]->date,1,1,this->data[i]->close));
       this->bal += this->data[i]->close;
