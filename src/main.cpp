@@ -30,6 +30,10 @@ int main(int argc,char* argv[]){
     RSI* rsi_strategy = new RSI(argv[2],stoi(argv[3]),stoi(argv[4]),stod(argv[5]),stod(argv[6]),argv[7],argv[8]);
     rsi_strategy->run_strategy();
   }
+  else if(strategy=="ADX"){
+    ADX* adx_strategy = new ADX(argv[2],stoi(argv[3]),stoi(argv[4]),stod(argv[5]),argv[6],argv[7]);
+    adx_strategy->run_strategy();
+  }
   else if(strategy=="LINEAR_REGRESSION"){
     LinearRegression* linreg_strategy = new LinearRegression(argv[2],stoi(argv[3]),stoi(argv[4]),argv[5],argv[6]);
     linreg_strategy->run_strategy();
