@@ -30,8 +30,8 @@ vector<Stock*> read_csv(string filename){
   return data;
 }
 
-void write_order_statistics(const vector<Order*> &data){
-  ofstream file("order_statisitcs.csv",ios::out);
+void write_order_statistics(const vector<Order*> &data, const string& filename){
+  ofstream file(filename,ios::out);
   file<<"Date"<<','<<"Order_dir"<<','<<"Quantity"<<','<<"Price"<<"\n";
   for(auto &order:data){
     file<<order->date<<','

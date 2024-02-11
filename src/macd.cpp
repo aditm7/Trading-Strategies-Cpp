@@ -64,6 +64,6 @@ void MACD::run(){ // actual strategy code
 void MACD::run_strategy(){ // calls run and just save the data
   run();
   write_daily_cashflow(this->cashflow);
-  write_order_statistics(this->orders);
+  write_order_statistics(this->orders, "order_statisitcs.csv");
   write_to_txt(this->bal);
 }

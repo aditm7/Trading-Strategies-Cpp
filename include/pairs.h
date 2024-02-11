@@ -18,7 +18,8 @@ struct Pairs{
   double bal=0;
   vector<Stock*> data_1;
   vector<Stock*> data_2;
-  vector<Order*> orders;
+  vector<Order*> orders_1;
+  vector<Order*> orders_2;
   vector<pair<string,double>> cashflow;
 
   Pairs();

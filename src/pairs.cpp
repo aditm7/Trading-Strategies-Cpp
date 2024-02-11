@@ -67,11 +67,11 @@ void Pairs::run(){ // actual strategy code
             this->curr_x_2++;
 
             // Sell S1
-            this->orders.push_back(new Order(this->data_1[i]->date,1,1,this->data_1[i]->close));
+            this->orders_1.push_back(new Order(this->data_1[i]->date,1,1,this->data_1[i]->close));
             this->bal += this->data_1[i]->close;
 
             // Buy S2
-            this->orders.push_back(new Order(this->data_2[i]->date,0,1,this->data_2[i]->close));
+            this->orders_2.push_back(new Order(this->data_2[i]->date,0,1,this->data_2[i]->close));
             this->bal -= this->data_2[i]->close;
         }
     }
@@ -81,11 +81,11 @@ void Pairs::run(){ // actual strategy code
             this->curr_x_1++;
 
             // Sell S2
-            this->orders.push_back(new Order(this->data_2[i]->date,1,1,this->data_2[i]->close));
+            this->orders_2.push_back(new Order(this->data_2[i]->date,1,1,this->data_2[i]->close));
             this->bal += this->data_2[i]->close;
 
             // Buy S1
-            this->orders.push_back(new Order(this->data_1[i]->date,0,1,this->data_1[i]->close));
+            this->orders_1.push_back(new Order(this->data_1[i]->date,0,1,this->data_1[i]->close));
             this->bal -= this->data_1[i]->close;
         }
     }
@@ -100,6 +100,7 @@ void Pairs::run(){ // actual strategy code
 void Pairs::run_strategy(){ // calls run and just save the data
   run();
   write_daily_cashflow(this->cashflow);
-  write_order_statistics(this->orders);
+  write_order_statistics(this->orders_1, "order_statisitcs_1.csv");
+  write_order_statistics(this->orders_2, "order_statisitcs_2.csv");
   write_to_txt(this->bal);
 }
