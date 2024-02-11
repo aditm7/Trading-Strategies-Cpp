@@ -62,12 +62,12 @@ void Basic::run(){ // actual strategy code
     else dq.push_front(0);
     assert(dq.size()==this->n);
 
-    if(signal==this->x && this->curr_x < this->x){ // BUY the stock
+    if(signal==this->n && this->curr_x < this->x){ // BUY the stock
       curr_x++;
       this->orders.push_back(new Order(this->data[i]->date,0,1,this->data[i]->close));
       this->bal -= this->data[i]->close;
     }
-    else if(signal==-this->x && this->curr_x > -this->x){ // SELL the stock
+    else if(signal==-this->n && this->curr_x > -this->x){ // SELL the stock
       curr_x--;
       this->orders.push_back(new Order(this->data[i]->date,1,1,this->data[i]->close));
       this->bal += this->data[i]->close;
