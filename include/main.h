@@ -8,6 +8,7 @@
 #include "rsi.h"
 #include "adx.h"
 #include "linear_regression.h"
+#include "pairs.h"
 #include "debug.h"
 
 using namespace std;

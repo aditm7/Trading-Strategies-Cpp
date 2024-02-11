@@ -38,6 +38,10 @@ int main(int argc,char* argv[]){
     LinearRegression* linreg_strategy = new LinearRegression(argv[2],stoi(argv[3]),stoi(argv[4]),argv[5],argv[6]);
     linreg_strategy->run_strategy();
   }
+  else if(strategy=="PAIRS"){
+    Pairs* pair_strategy = new Pairs(argv[2],argv[3],stoi(argv[4]),stoi(argv[5]),stoi(argv[6]),argv[7],argv[8]);
+    pair_strategy->run_strategy();
+  }
 
   return 0;
 }

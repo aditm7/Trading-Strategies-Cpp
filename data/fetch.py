@@ -77,6 +77,21 @@ try:
     raw = fetch_raw_data(stock_code,train_from_date,train_to_date)
     save_csv(raw,'train')
   
+  elif strategy=="PAIRS":
+    stock_code_1 = sys.argv[2]
+    stock_code_2 = sys.argv[3]
+    from_date = datetime.strptime(str(sys.argv[5]), '%d/%m/%Y').date()
+    to_date = datetime.strptime(str(sys.argv[6]), '%d/%m/%Y').date()
+    
+    from_date = from_date - timedelta(days=max(20,min(4*(int)(sys.argv[4]),1000)))
+    
+    # Save data from stock code 1
+    raw = fetch_raw_data(stock_code_1,from_date,to_date)
+    save_csv(raw,stock_code_1)
+    # Save data from stock code 2
+    raw = fetch_raw_data(stock_code_2,from_date,to_date)
+    save_csv(raw,stock_code_2)
+  
   print(f"Success for {stock_code}")
 
 except Exception as e:
