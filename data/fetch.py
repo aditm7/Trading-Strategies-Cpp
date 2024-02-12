@@ -67,13 +67,14 @@ try:
   
   elif strategy=="LINEAR_REGRESSION":
     from_date = datetime.strptime(str(sys.argv[3]), '%d/%m/%Y').date()
-    from_date = from_date - timedelta(days=10)
+    from_date = from_date - timedelta(days=30)
     to_date = datetime.strptime(str(sys.argv[4]), '%d/%m/%Y').date()
     raw = fetch_raw_data(stock_code,from_date,to_date)
     save_csv(raw,stock_code)
 
     train_from_date = datetime.strptime(str(sys.argv[5]), '%d/%m/%Y').date()
     train_to_date = datetime.strptime(str(sys.argv[6]), '%d/%m/%Y').date()
+    train_from_date = train_from_date - timedelta(days=30)
     raw = fetch_raw_data(stock_code,train_from_date,train_to_date)
     save_csv(raw,'train')
   
@@ -85,10 +86,9 @@ try:
     save_csv(raw,stock_code)
 
     train_from_date = datetime.strptime(str(sys.argv[3]), '%d/%m/%Y').date()
-    train_from_date = train_from_date - timedelta(days=365)
+    train_from_date = train_from_date - timedelta(days=400)
     train_to_date = datetime.strptime(str(sys.argv[4]), '%d/%m/%Y').date()
     train_to_date = train_to_date - timedelta(days=365)
-    print(train_from_date,train_to_date)
     raw = fetch_raw_data(stock_code,train_from_date,train_to_date)
     save_csv(raw,'train')
   

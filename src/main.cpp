@@ -35,7 +35,7 @@ int main(int argc,char* argv[]){
     adx_strategy->run_strategy();
   }
   else if(strategy=="LINEAR_REGRESSION"){
-    LinearRegression* linreg_strategy = new LinearRegression(argv[2],stoi(argv[3]),stoi(argv[4]),argv[5],argv[6]);
+    LinearRegression* linreg_strategy = new LinearRegression(argv[2],stoi(argv[3]),stoi(argv[4]),argv[5],argv[6],argv[7],argv[8]);
     linreg_strategy->run_strategy();
   }
   else if(strategy=="BEST_OF_ALL"){

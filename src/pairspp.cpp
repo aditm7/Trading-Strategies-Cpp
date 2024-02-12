@@ -58,7 +58,6 @@ void Pairspp::run(){ // actual strategy code
 
     // Z-score
     double z_score = ((data_1[i]->close -  data_2[i]->close) - rolling_mean) / std_dev;
-    
     int net_pos = 0; // net positions +/- in this trading day
     // Placing trade
     if(z_score > this->threshold && this->curr_x > -this->x){ // Normal sell signal

@@ -59,8 +59,8 @@ void DMApp::run(){ // actual strategy code
         last_ama = new_ama;
         last_sf = new_sf;
       }
-      if(this->data[i]->close >= last_ama + (last_ama*this->p/100.0) && this->curr_x < this->x) normal_trade++;
-      else if(last_ama >= this->data[i]->close + (last_ama*this->p/100.0) && this->curr_x > -this->x) normal_trade--;
+      if(this->data[i]->close >= last_ama + ((last_ama*this->p*1.0)/100.0) && this->curr_x < this->x) normal_trade++;
+      else if(last_ama >= this->data[i]->close + ((last_ama*this->p*1.0)/100.0) && this->curr_x > -this->x) normal_trade--;
     }
 
     int max_hold_trade = 0;

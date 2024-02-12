@@ -19,7 +19,18 @@ BestOfAll::BestOfAll(string _code,string _start_date,string _end_date){
   this->macd_strategy = new MACD(_code,5,_start_date,_end_date);
   this->rsi_strategy = new RSI(_code,14,5,30,70,_start_date,_end_date);
   this->adx_strategy = new ADX(_code,14,5,25,_start_date,_end_date);
-  this->linear_regression_strategy = new LinearRegression(_code,5,2,_start_date,_end_date);
+  
+  int year1, year2;  // subtracting one year from the given dates
+  char day1[3],day2[3],month1[3],month2[3];
+  sscanf(_start_date.c_str(), "%2s/%2s/%d", day1, month1, &year1);
+  sscanf(_end_date.c_str(), "%2s/%2s/%d", day2, month2, &year2);
+  year1--;year2--;
+  stringstream new_date_1,new_date_2;
+  new_date_1 << string(day1, 2) << "/" << string(month1, 2) << "/" << year1;
+  new_date_2 << string(day2, 2) << "/" << string(month2, 2) << "/" << year2;
+  string _train_start_date = new_date_1.str();
+  string _train_end_date = new_date_2.str();
+  this->linear_regression_strategy = new LinearRegression(_code,5,2,_start_date,_end_date,_train_start_date,_train_end_date);
 }
 
 void BestOfAll::run(){

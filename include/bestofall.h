@@ -12,6 +12,9 @@
 #include <cassert>
 #include <thread>
 #include <vector>
+#include <string>
+#include <sstream>
+#include <cstdio>
 using namespace std;
 
 struct BestOfAll{

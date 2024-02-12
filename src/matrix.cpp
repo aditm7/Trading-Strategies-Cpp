@@ -58,7 +58,7 @@ double determinant(const vector<vector<double>>& matrix) {
                 }
             }
         }
-        det += pow(-1, i) * matrix[0][i] * determinant(minor);
+        det += (i%2==0?1:-1) * matrix[0][i] * determinant(minor);
     }
     return det;
 }
@@ -83,7 +83,7 @@ vector<vector<double>> inverse(const vector<vector<double>>& matrix) {
                     }
                 }
             }
-            inverse[j][i] = pow(-1, i + j) * determinant(minor) / det;
+            inverse[j][i] = ((i+j)%2==0?1:-1) * determinant(minor) / det;
         }
     }
     return inverse;
