@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<string>
+#include <iomanip>
 #include "basic.h"
 #include "dma.h"
 #include "dmapp.h"

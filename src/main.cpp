@@ -8,6 +8,8 @@ int main(int argc,char* argv[]){
     cout<<"Insufficient arguments, exiting ...."<<endl;
     return 1;
   }
+  cout << fixed << setprecision(2);
+  cerr << fixed << setprecision(2);
 
   string strategy = argv[1];
   if(strategy=="BASIC"){

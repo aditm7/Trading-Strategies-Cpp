@@ -76,6 +76,7 @@ void Pairs::run(){ // actual strategy code
       this->orders_1.push_back(new Order(this->data_1[i]->date,0,1,this->data_1[i]->close));
       this->bal -= this->data_1[i]->close;
     }
+    if(this->data_1[i]->date=="27/01/2023") debug(this->bal);
     this->cashflow.push_back({this->data_1[i]->date,this->bal});
   }
 

@@ -32,6 +32,7 @@ vector<Stock*> read_csv(string filename){
 
 void write_order_statistics(const vector<Order*> &data, const string& filename){
   ofstream file(filename,ios::out);
+  file<<fixed<<setprecision(2);
   file<<"Date"<<','<<"Order_dir"<<','<<"Quantity"<<','<<"Price"<<"\n";
   for(auto &order:data){
     file<<order->date<<','
@@ -44,6 +45,7 @@ void write_order_statistics(const vector<Order*> &data, const string& filename){
 
 void write_daily_cashflow(const vector<pair<string,double>> &data){
   ofstream file("daily_cashflow.csv",ios::out);
+  file<<fixed<<setprecision(2);
   file<<"Date"<<','<<"Cashflow"<<"\n";
   for(auto &flow:data){
     file<<flow.first<<','<<flow.second<<"\n";
@@ -53,6 +55,7 @@ void write_daily_cashflow(const vector<pair<string,double>> &data){
 
 void write_to_txt(double num){
   ofstream file("final_pnl.txt",ios::out);
+  file<<fixed<<setprecision(2);
   file<<num<<"\n";
   file.close();
 }

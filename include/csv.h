@@ -7,6 +7,7 @@
 #include <cassert>
 #include "stock.h"
 #include "debug.h"
+#include <iomanip>
 using namespace std;
 
 vector<Stock*> read_csv(string filename);
