@@ -41,36 +41,42 @@ void BestOfAll::run(){
                         this->rsi_strategy->bal,
                         this->adx_strategy->bal,
                         this->linear_regression_strategy->bal };
+  
   int idx = max_element(ans.begin(),ans.end()) - ans.begin();
-  switch (idx){
-    case 0:
-      this->bal = this->basic_strategy->bal;
-      this->orders = this->basic_strategy->orders;
-      this->cashflow = this->basic_strategy->cashflow;
-    case 1:
-      this->bal = this->dma_strategy->bal;
-      this->orders = this->dma_strategy->orders;
-      this->cashflow = this->dma_strategy->cashflow;
-    case 2:
-      this->bal = this->dmapp_strategy->bal;
-      this->orders = this->dmapp_strategy->orders;
-      this->cashflow = this->dmapp_strategy->cashflow;
-    case 3:
-      this->bal = this->macd_strategy->bal;
-      this->orders = this->macd_strategy->orders;
-      this->cashflow = this->macd_strategy->cashflow;
-    case 4:
-      this->bal = this->rsi_strategy->bal;
-      this->orders = this->rsi_strategy->orders;
-      this->cashflow = this->rsi_strategy->cashflow;
-    case 5:
-      this->bal = this->adx_strategy->bal;
-      this->orders = this->adx_strategy->orders;
-      this->cashflow = this->adx_strategy->cashflow;
-    case 6:
-      this->bal = this->linear_regression_strategy->bal;
-      this->orders = this->linear_regression_strategy->orders;
-      this->cashflow = this->linear_regression_strategy->cashflow;
+  if(idx==0){
+    this->bal = this->basic_strategy->bal;
+    this->orders = this->basic_strategy->orders;
+    this->cashflow = this->basic_strategy->cashflow;
+  }
+  else if(idx==1){
+    this->bal = this->dma_strategy->bal;
+    this->orders = this->dma_strategy->orders;
+    this->cashflow = this->dma_strategy->cashflow;
+  }
+  else if(idx==2){
+    this->bal = this->dmapp_strategy->bal;
+    this->orders = this->dmapp_strategy->orders;
+    this->cashflow = this->dmapp_strategy->cashflow;
+  }
+  else if(idx==3){
+    this->bal = this->macd_strategy->bal;
+    this->orders = this->macd_strategy->orders;
+    this->cashflow = this->macd_strategy->cashflow;
+  }
+  else if(idx==4){
+    this->bal = this->rsi_strategy->bal;
+    this->orders = this->rsi_strategy->orders;
+    this->cashflow = this->rsi_strategy->cashflow;
+  }
+  else if(idx==5){
+    this->bal = this->adx_strategy->bal;
+    this->orders = this->adx_strategy->orders;
+    this->cashflow = this->adx_strategy->cashflow;
+  }
+  else if(idx==6){
+    this->bal = this->linear_regression_strategy->bal;
+    this->orders = this->linear_regression_strategy->orders;
+    this->cashflow = this->linear_regression_strategy->cashflow;
   }
 }
 

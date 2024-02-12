@@ -38,7 +38,7 @@ void ADX::run(){ // actual strategy code
   double last_atr = last_tr;
   double last_di1 = (last_dm1)/(last_atr); // di+
   double last_di0 = (last_dm0)/(last_atr); // di-
-  double last_dx = ((last_di1-last_di0)/(last_di1+last_di0))*100.0;
+  double last_dx = (abs(last_di1+last_di0-0.0)!=0.0 ? ((last_di1-last_di0)/(last_di1+last_di0))*100.0 : 0.0);
   double last_adx = last_dx;
   
   for(int i=idx;i<this->data.size();i++){ // doing the trading
