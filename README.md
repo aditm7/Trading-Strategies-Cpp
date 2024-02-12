@@ -1,6 +1,7 @@
 # COP290_A1_task3
 
 ## To-Do
+- Used Normal equations in Regression ?
 - Cross check DMA++ Pairs++ Regression BestOfALL ADX
 - Add code for Pairs++ ✅
 - n^3 inverse finding of the matrix

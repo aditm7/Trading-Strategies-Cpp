@@ -43,8 +43,14 @@ int main(int argc,char* argv[]){
     best_strategy->run_strategy();
   }
   else if(strategy=="PAIRS"){
-    Pairs* pair_strategy = new Pairs(argv[2],argv[3],stoi(argv[4]),stoi(argv[5]),stoi(argv[6]),argv[7],argv[8]);
-    pair_strategy->run_strategy();
+    if(argc==9){
+      Pairs* pairs_strategy = new Pairs(argv[2],argv[3],stoi(argv[4]),stoi(argv[5]),stod(argv[6]),argv[7],argv[8]);
+      pairs_strategy->run_strategy();
+    }
+    else{
+      Pairspp* pairspp_strategy = new Pairspp(argv[2],argv[3],stoi(argv[4]),stoi(argv[5]),stod(argv[6]),stod(argv[7]),argv[8],argv[9]);
+      pairspp_strategy->run_strategy();
+    }
   }
 
   return 0;

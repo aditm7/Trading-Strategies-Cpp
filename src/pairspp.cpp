@@ -1,19 +1,20 @@
-#include "pairs.h"
+#include "pairspp.h"
 
-Pairs::Pairs(){ // default constructor
-
-}
-
-Pairs::~Pairs(){ // default destructor
+Pairspp::Pairspp(){ // default constructor
 
 }
 
-Pairs::Pairs(string _code_1, string _code_2,int _n,int _x,double _threshold, string _start_date,string _end_date){
+Pairspp::~Pairspp(){ // default destructor
+
+}
+
+Pairspp::Pairspp(string _code_1, string _code_2,int _n,int _x,double _threshold,double _stop_loss_threshold, string _start_date,string _end_date){
   this->stock_code_1 = _code_1;
   this->stock_code_2 = _code_2;
   this->n = _n;
   this->x = _x;
   this->threshold = _threshold;
+  this->stop_loss_threshold = _stop_loss_threshold;
   this->start_date = _start_date; 
   this->end_date = _end_date;
 
@@ -21,7 +22,7 @@ Pairs::Pairs(string _code_1, string _code_2,int _n,int _x,double _threshold, str
   this->data_2 = read_csv("data/"+this->stock_code_2+".csv");
 }
 
-void Pairs::run(){ // actual strategy code
+void Pairspp::run(){ // actual strategy code
   assert(data_1.size()==data_2.size());
 
   int idx = -1;
@@ -34,6 +35,7 @@ void Pairs::run(){ // actual strategy code
   if(idx==-1) return; // returning if no trading day found
 
   assert(idx+1>=this->n);
+
   double sq_sum = 0.0;
   double sum = 0.0;
   int tn=this->n; int k=idx-1;
@@ -56,25 +58,42 @@ void Pairs::run(){ // actual strategy code
 
     // Z-score
     double z_score = ((data_1[i]->close -  data_2[i]->close) - rolling_mean) / std_dev;
-
+    
+    int net_pos = 0; // net positions +/- in this trading day
     // Placing trade
-    if(z_score > this->threshold && this->curr_x > -this->x){ // SELL S1, BUY S2
+    if(z_score > this->threshold && this->curr_x > -this->x){ // Normal sell signal
+      net_pos--;
+      // have long positions, buy the earliest one, else normal sell
+      (this->curr_x > 0 ? positions.pop_front() : positions.push_back({rolling_mean,std_dev}));
       this->curr_x--;
-      // Sell S1
-      this->orders_1.push_back(new Order(this->data_1[i]->date,1,1,this->data_1[i]->close));
-      this->bal += this->data_1[i]->close;
-      // Buy S2
-      this->orders_2.push_back(new Order(this->data_2[i]->date,0,1,this->data_2[i]->close));
-      this->bal -= this->data_2[i]->close;
     }
-    else if(z_score < -this->threshold && this->curr_x < this->x){ // BUY S1, SELL S2
+    else if(z_score < -this->threshold && this->curr_x < this->x){ // Normal buy signal
+      net_pos++;
+      // have short positions, sell the earliest one, else normal buy
+      (this->curr_x < 0 ? positions.pop_front() : positions.push_back({rolling_mean,std_dev}));
       this->curr_x++;
-      // Sell S2
-      this->orders_2.push_back(new Order(this->data_2[i]->date,1,1,this->data_2[i]->close));
-      this->bal += this->data_2[i]->close;
-      // Buy S1
-      this->orders_1.push_back(new Order(this->data_1[i]->date,0,1,this->data_1[i]->close));
-      this->bal -= this->data_1[i]->close;
+    }
+
+    // checking the status of all positions
+    for(auto it=this->positions.begin();it!=this->positions.end();it++){
+      double new_zscore = ((data_1[i]->close - data_2[i]->close) - (*it).first) / (*it).second;
+      if(abs(new_zscore) > this->stop_loss_threshold){ // clear the position
+        if(this->curr_x > 0){ // long position, SELL signal
+          net_pos--;this->curr_x--;
+          it = this->positions.erase(it); it--;
+        }
+        else if(this->curr_x < 0){ // short position, BUY signal
+          net_pos++;this->curr_x++;
+          it = this->positions.erase(it); it--;
+        }
+      }
+    }
+
+    this->bal -= net_pos*this->data_1[i]->close;
+    this->bal += net_pos*this->data_2[i]->close;
+    if(net_pos!=0){ // updating order stats only if some net trade is there
+      this->orders_1.push_back(new Order(this->data_1[i]->date,(net_pos>0?0:1),abs(net_pos),this->data_1[i]->close));
+      this->orders_2.push_back(new Order(this->data_2[i]->date,(net_pos<0?0:1),abs(net_pos),this->data_2[i]->close));
     }
     this->cashflow.push_back({this->data_1[i]->date,this->bal});
   }
@@ -84,7 +103,7 @@ void Pairs::run(){ // actual strategy code
   this->bal -= this->curr_x * this->data_2.back()->close;
 }
 
-void Pairs::run_strategy(){ // calls run and just save the data
+void Pairspp::run_strategy(){ // calls run and just save the data
   run();
   write_daily_cashflow(this->cashflow);
   write_order_statistics(this->orders_1, "order_statistics_1.csv");

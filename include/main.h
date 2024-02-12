@@ -10,6 +10,7 @@
 #include "linear_regression.h"
 #include "bestofall.h"
 #include "pairs.h"
+#include "pairspp.h"
 #include "debug.h"
 
 using namespace std;
