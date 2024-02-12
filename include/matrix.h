@@ -1,5 +1,4 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#pragma once
 
 #include <vector>
 #include <stdexcept>
@@ -15,5 +14,3 @@ vector<vector<double>> multiply(const vector<vector<double>>& matrix1, const vec
 double determinant(const vector<vector<double>>& matrix);
 
 vector<vector<double>> inverse(const vector<vector<double>>& matrix);
-
-#endif // MATRIX_H
