@@ -33,6 +33,7 @@ void LinearRegression::train_model(){
 
   vector<vector<double>> X(this->train_data.size()-idx);
   vector<vector<double>> Y(this->train_data.size()-idx);
+  // debug(X.size(),Y.size());
   for(int i=idx;i<this->train_data.size();i++){
     X[i-idx] = {1,this->train_data[i-1]->close,this->train_data[i-1]->open, this->train_data[i-1]->vwap, 
             this->train_data[i-1]->low, this->train_data[i-1]->high, 
@@ -49,6 +50,8 @@ void LinearRegression::train_model(){
   vector<double> wts;
   for(int i=0;i<8;i++) wts.push_back(theta[i][0]);
   this->predicted_wts = wts;
+  // this->predicted_wts[6]=0.0;
+  // debug(wts);
 }
 
 double LinearRegression::predict_price(vector<double> &row){
@@ -94,6 +97,10 @@ void LinearRegression::run(){ // actual strategy code
     }
     this->bal = round(this->bal * 100.0) / 100.0;
     this->cashflow.push_back({this->trade_data[i]->date,this->bal});
+    
+    // this->train_data.push_back(trade_data[i]);
+    // this->train_start_date = this->train_data[this->train_data.size() - 30]->date;
+    // train_model();
   }
 
   // squaring off the positions
