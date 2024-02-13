@@ -15,6 +15,7 @@
 #include <string>
 #include <sstream>
 #include <cstdio>
+#include <cmath>
 #include <algorithm>
 
 using namespace std;

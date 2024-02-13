@@ -2,6 +2,7 @@
 #include "csv.h"
 #include "stock.h"
 #include "debug.h"
+#include <cmath>
 #include <cassert>
 
 using namespace std;

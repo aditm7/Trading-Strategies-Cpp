@@ -4,6 +4,7 @@
 #include "debug.h"
 #include <cassert>
 #include <deque>
+#include <cmath>
 using namespace std;
 
 struct DMApp{

@@ -1,13 +1,10 @@
 #pragma once
-#include <string>
-#include <iostream>
-
-using namespace std;
-
 #include "csv.h"
 #include "stock.h"
 #include "debug.h"
 #include "matrix.h"
+#include <string>
+#include <cmath>
 
 using namespace std;
 

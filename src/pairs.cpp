@@ -23,7 +23,6 @@ Pairs::Pairs(string _code_1, string _code_2,int _n,int _x,double _threshold, str
 
 void Pairs::run(){ // actual strategy code
   assert(data_1.size()==data_2.size());
-
   int idx = -1;
   for(int i=0;i<this->data_1.size();i++){ // first day from which trading should begin
     if(compare_dates(this->data_1[i]->date,this->start_date)){
@@ -60,29 +59,28 @@ void Pairs::run(){ // actual strategy code
     // Placing trade
     if(z_score > this->threshold && this->curr_x > -this->x){ // SELL S1, BUY S2
       this->curr_x--;
-      // Sell S1
+      // Sell S1,Buy S2
       this->orders_1.push_back(new Order(this->data_1[i]->date,1,1,this->data_1[i]->close));
-      this->bal += this->data_1[i]->close;
-      // Buy S2
       this->orders_2.push_back(new Order(this->data_2[i]->date,0,1,this->data_2[i]->close));
-      this->bal -= this->data_2[i]->close;
+      this->bal += this->data_1[i]->close - this->data_2[i]->close;
+      
+      
     }
     else if(z_score < -this->threshold && this->curr_x < this->x){ // BUY S1, SELL S2
       this->curr_x++;
-      // Sell S2
+      // Sell S2,Buy S1
       this->orders_2.push_back(new Order(this->data_2[i]->date,1,1,this->data_2[i]->close));
-      this->bal += this->data_2[i]->close;
-      // Buy S1
       this->orders_1.push_back(new Order(this->data_1[i]->date,0,1,this->data_1[i]->close));
-      this->bal -= this->data_1[i]->close;
+      this->bal += this->data_2[i]->close - this->data_1[i]->close;
     }
-    if(this->data_1[i]->date=="27/01/2023") debug(this->bal);
+    this->bal = round(this->bal * 100.0) / 100.0;
     this->cashflow.push_back({this->data_1[i]->date,this->bal});
   }
 
   // squaring off the positions
   this->bal += this->curr_x * this->data_1.back()->close;
   this->bal -= this->curr_x * this->data_2.back()->close;
+  this->bal = round(this->bal * 100.0) / 100.0;
 }
 
 void Pairs::run_strategy(){ // calls run and just save the data

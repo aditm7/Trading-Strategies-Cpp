@@ -94,12 +94,14 @@ void Pairspp::run(){ // actual strategy code
       this->orders_1.push_back(new Order(this->data_1[i]->date,(net_pos>0?0:1),abs(net_pos),this->data_1[i]->close));
       this->orders_2.push_back(new Order(this->data_2[i]->date,(net_pos<0?0:1),abs(net_pos),this->data_2[i]->close));
     }
+    this->bal = round(this->bal * 100.0) / 100.0;
     this->cashflow.push_back({this->data_1[i]->date,this->bal});
   }
 
   // squaring off the positions
   this->bal += this->curr_x * this->data_1.back()->close;
   this->bal -= this->curr_x * this->data_2.back()->close;
+  this->bal = round(this->bal * 100.0) / 100.0;
 }
 
 void Pairspp::run_strategy(){ // calls run and just save the data

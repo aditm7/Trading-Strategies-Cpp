@@ -71,11 +71,13 @@ void ADX::run(){ // actual strategy code
       this->orders.push_back(new Order(this->data[i]->date,1,1,this->data[i]->close));
       this->bal += this->data[i]->close;
     }
+    this->bal = round(this->bal * 100.0) / 100.0;
     this->cashflow.push_back({this->data[i]->date,this->bal});
   }
 
   // squaring off the positions
   this->bal += this->curr_x * this->data.back()->close;
+  this->bal = round(this->bal * 100.0) / 100.0;
 }
 
 void ADX::run_strategy(){ // calls run and just save the data

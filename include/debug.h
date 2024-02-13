@@ -57,6 +57,7 @@ inline void debug_out(vector<string> __attribute__((unused)) args, __attribute__
 template <typename Head, typename... Tail>
 inline void debug_out(vector<string> args, int idx, int LINE_NUM, Head H, Tail... T)
 {
+    cerr<<fixed<<setprecision(2);
     if (idx > 0)
         cerr << ", ";
     else

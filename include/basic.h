@@ -3,6 +3,7 @@
 #include "stock.h"
 #include "debug.h"
 #include <cassert>
+#include <cmath>
 #include <deque>
 
 using namespace std;

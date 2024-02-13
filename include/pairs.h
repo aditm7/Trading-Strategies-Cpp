@@ -4,7 +4,6 @@
 #include <cmath>
 #include <vector>
 #include "debug.h"
-
 using namespace std;
 
 struct Pairs{

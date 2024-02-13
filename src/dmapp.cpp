@@ -85,10 +85,12 @@ void DMApp::run(){ // actual strategy code
       dq.pop_front();
       dq.push_back(i);
     }
+    this->bal = round(this->bal * 100.0) / 100.0;
     this->cashflow.push_back({this->data[i]->date,this->bal});
   }
   // squaring off the positions
   this->bal += this->curr_x * this->data.back()->close;
+  this->bal = round(this->bal * 100.0) / 100.0;
 }
 
 void DMApp::run_strategy(){ // calls run and just save the data
