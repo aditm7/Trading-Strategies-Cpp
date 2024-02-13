@@ -3,6 +3,8 @@
 #include "stock.h"
 #include "debug.h"
 #include <cassert>
+#include <cmath>
+
 using namespace std;
 
 struct DMA{

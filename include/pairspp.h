@@ -4,6 +4,8 @@
 #include "debug.h"
 #include <iterator>
 #include <list>
+#include <cmath>
+#include <vector>
 
 using namespace std;
 

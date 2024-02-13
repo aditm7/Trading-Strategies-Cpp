@@ -1,6 +1,8 @@
 #pragma once
 #include "csv.h"
 #include "stock.h"
+#include <cmath>
+#include <vector>
 #include "debug.h"
 
 using namespace std;

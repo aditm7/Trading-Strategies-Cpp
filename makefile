@@ -5,7 +5,7 @@ TARGET = $(BINDIR)/main
 PIP_TARGET = $(BINDIR)/done.txt
 
 CPP = g++
-CPPFLAGS = -O3 -I$(INCDIR) -MMD -Wall -std=c++17 -pthread -DDEBUG
+CPPFLAGS = -O3 -I$(INCDIR) -MMD -std=c++17 -pthread -w
 
 OBJS = $(patsubst $(SRCDIR)/%.cpp, $(BINDIR)/%.o, $(wildcard $(SRCDIR)/*.cpp))
 

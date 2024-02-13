@@ -5,7 +5,7 @@
 - n^3 inverse finding of the matrix : Not needed (8x8 matrix only)
 - Piazza go through again of posts
 - Remove DEBUG flag, suppress warnings ?
-- Linux testing
+- Linux testing : Headers issues fixed 😃
 
 - Test and improve parallel performance metrics ? -> Too good already :)
 <br> 
